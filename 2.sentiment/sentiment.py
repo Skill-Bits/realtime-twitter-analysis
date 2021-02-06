@@ -30,11 +30,14 @@ channel.queue_declare(queue='ingest')
 
 
 def callback(ch, method, properties, body):
-    print(" [x] Received new tweet! %s" % body)
+    # print(" [x] Received new tweet! %s" % body)
     status = json.loads(body)
     (pos, neu, neg) = analyze_sentiment(status["text"])
 
-    status["sentiment"] = {'pos': pos, 'neu': neu, 'neg': neg}
+    status["pos"] = pos
+    status["neu"] = neu
+    status["neg"] = neg
+    #print('[sentiment] %s' % json.dumps(status))
     channel.basic_publish(
         exchange='', routing_key='persistence', body=json.dumps(status))
 

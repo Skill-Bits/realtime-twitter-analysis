@@ -10,7 +10,7 @@ channel = connection.channel()
 channel.queue_declare(queue='persistence')
 
 def callback(ch, method, properties, body):
-    print(" [x] Received new status!")
+    #print(" [x] Received new status!")
     obj = json.loads(body)
     data = [
     {
@@ -24,7 +24,7 @@ def callback(ch, method, properties, body):
     database.write_points(data)
 
 
-channel.basic_consume(queue='ingest', on_message_callback=callback, auto_ack=True)
+channel.basic_consume(queue='persistence', on_message_callback=callback, auto_ack=True)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()
