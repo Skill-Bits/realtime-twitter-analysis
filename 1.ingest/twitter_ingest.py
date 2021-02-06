@@ -4,11 +4,22 @@ import os
 from dotenv import load_dotenv
 import csv
 import re
+import pika
+import datetime
+import json
+
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(host='localhost'))
+channel = connection.channel()
+channel.queue_declare(queue='ingest')
+
 
 # Load credentials from .env file
 load_dotenv()
 
 """https://stackoverflow.com/a/49986645/3711660"""
+
+
 def deEmojify(text):
     regrex_pattern = re.compile(pattern="["
                                 u"\U0001F600-\U0001F64F"  # emoticons
@@ -30,12 +41,26 @@ if (not api):
     print("Authentication failed!")
     sys.exit(-1)
 
+
 class MyStreamListener(tweepy.StreamListener):
-    def on_status(self,status):
-        print(status.text)
-    def on_error(self,status_code):
+    def on_status(self, status):
+        obj = {'text': status.text,
+               'author': status.user.screen_name,
+               'author_id': status.user.id,
+               'time': status.created_at.isoformat(),
+               'track': 'news'}
+
+        channel.basic_publish(
+            exchange='', routing_key='ingest', body=json.dumps(obj))
+
+    def on_error(self, status_code):
         print(status_code)
 
+
+print('twitter ingestion in progress...')
 myStreamListener = MyStreamListener()
-myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
-myStream.filter(track=["news"])
+myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
+myStream.filter(track=["news"], languages=['en'])
+
+
+connection.close()

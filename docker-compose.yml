@@ -35,7 +35,17 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+  rabbitmq: # guest/guest
+    image:  rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    ports:
+     - 5672:5672 # rabbitmq
+     - 8081:15692 # prometheus HTTP GET /metrics
+     - 8080:15672 # management UI
+    volumes:
+      - rabbitmq-storage:/var/lib/rabbitmq
 volumes:
   influxdb-storage:
   # chronograf-storage:
   grafana-storage:
+  rabbitmq-storage:

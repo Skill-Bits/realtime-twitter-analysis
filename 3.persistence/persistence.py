@@ -1,39 +1,31 @@
 from influxdb import InfluxDBClient
+import pika
+import json
 
-client = InfluxDBClient(host='localhost', port=8086, username='admin', password='admin', ssl=False, verify_ssl=False, database='db0')
-json_body = [
+database = InfluxDBClient(host='localhost', port=8086, username='admin', password='admin', ssl=False, verify_ssl=False, database='db0')
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+channel = connection.channel()
+
+channel.queue_declare(queue='persistence')
+
+def callback(ch, method, properties, body):
+    print(" [x] Received new status!")
+    obj = json.loads(body)
+    data = [
     {
-        "measurement": "brushEvents",
+        "measurement": "status",
         "tags": {
-            "user": "Carol",
-            "brushId": "6c89f539-71c6-490d-a28d-6c5d84c0ee2f"
+            "track": obj["track"]
         },
-        "time": "2018-03-28T8:01:00Z",
-        "fields": {
-            "duration": 127
-        }
-    },
-    {
-        "measurement": "brushEvents",
-        "tags": {
-            "user": "Carol",
-            "brushId": "6c89f539-71c6-490d-a28d-6c5d84c0ee2f"
-        },
-        "time": "2018-03-29T8:04:00Z",
-        "fields": {
-            "duration": 132
-        }
-    },
-    {
-        "measurement": "brushEvents",
-        "tags": {
-            "user": "Carol",
-            "brushId": "6c89f539-71c6-490d-a28d-6c5d84c0ee2f"
-        },
-        "time": "2018-03-30T8:02:00Z",
-        "fields": {
-            "duration": 129
-        }
-    }
-]
-client.write_points(json_body)
+        "time": obj["time"],
+        "fields": obj
+    }]
+    database.write_points(data)
+
+
+channel.basic_consume(queue='ingest', on_message_callback=callback, auto_ack=True)
+
+print(' [*] Waiting for messages. To exit press CTRL+C')
+channel.start_consuming()
+
