@@ -43,13 +43,16 @@ if (not api):
 
 
 class MyStreamListener(tweepy.StreamListener):
+    def __init__(self, track: str):
+        self.track = track
+
     def on_status(self, status):
-        obj = {'text': status.text,
+        obj = {'text': deEmojify(status.text),
                'author': status.user.screen_name,
                'author_id': status.user.id,
                'time': status.created_at.isoformat(),
-               'track': 'news'}
-
+               'track': self.track}
+        print(dir(status))
         channel.basic_publish(
             exchange='', routing_key='ingest', body=json.dumps(obj))
 
@@ -58,9 +61,11 @@ class MyStreamListener(tweepy.StreamListener):
 
 
 print('twitter ingestion in progress...')
-myStreamListener = MyStreamListener()
+track = "news"
+
+myStreamListener = MyStreamListener(track)
 myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
-myStream.filter(track=["news"], languages=['en'])
+myStream.filter(track=[track], languages=['en'])
 
 
 connection.close()
