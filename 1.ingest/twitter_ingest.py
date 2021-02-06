@@ -42,17 +42,34 @@ if (not api):
     sys.exit(-1)
 
 
+def anyContains(tracks, text):
+    textLower = text.lower()
+    for track in tracks:
+        if track in textLower:
+            return track
+
+
 class MyStreamListener(tweepy.StreamListener):
-    def __init__(self, track: str):
-        self.track = track
+    def __init__(self, tracks):
+        self.tracks = tracks
+        super(MyStreamListener, self).__init__(None)
 
     def on_status(self, status):
-        obj = {'text': deEmojify(status.text),
+        text = ''
+        try:
+            text = status.extended_tweet['full_text']
+        except Exception:
+            text = status.text
+
+        text = deEmojify(text)
+        track = anyContains(self.tracks, json.dumps(status._json))
+        if track == None:
+            print('[ingest] track= none text=%s' % text)
+        obj = {'text': text,
                'author': status.user.screen_name,
                'author_id': status.user.id,
                'time': status.created_at.isoformat(),
-               'track': self.track}
-        print(dir(status))
+               'track': track}
         channel.basic_publish(
             exchange='', routing_key='ingest', body=json.dumps(obj))
 
@@ -60,12 +77,16 @@ class MyStreamListener(tweepy.StreamListener):
         print(status_code)
 
 
-print('twitter ingestion in progress...')
-track = "news"
+print('[ingest] twitter ingestion in progress...')
 
-myStreamListener = MyStreamListener(track)
+f = open("tracks.txt")
+tracks = f.read().splitlines()
+
+print('[ingest] listening on tracks: %s' % tracks)
+
+myStreamListener = MyStreamListener(tracks)
 myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
-myStream.filter(track=[track], languages=['en'])
+myStream.filter(track=tracks, languages=['en'])
 
 
 connection.close()
