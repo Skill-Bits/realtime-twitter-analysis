@@ -1,8 +1,12 @@
 from influxdb import InfluxDBClient
 import pika
 import json
+from dotenv import load_dotenv
+import os
 
-database = InfluxDBClient(host='localhost', port=8086, username='admin', password='admin', ssl=False, verify_ssl=False, database='db0')
+load_dotenv('..')
+
+database = InfluxDBClient(host='localhost', port=8086, username=os.getenv('INFLUXDB_USERNAME'), password=os.getenv('INFLUXDB_PASSWORD'), ssl=False, verify_ssl=False, database='db0')
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
