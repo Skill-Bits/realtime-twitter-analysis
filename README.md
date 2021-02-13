@@ -1,4 +1,5 @@
 # Twitter realtime analysis
+![image](https://user-images.githubusercontent.com/9840635/107858101-afb18900-6e32-11eb-9b79-b4bf192328cc.png)
 
 # Features
  - Tweepy for twitter fetching
