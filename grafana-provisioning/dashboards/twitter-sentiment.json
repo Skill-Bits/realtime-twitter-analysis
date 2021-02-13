@@ -1,0 +1,509 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 2,
+    "id": 1,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "datasource": null,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 7,
+        "panels": [],
+        "title": "Row title",
+        "type": "row"
+      },
+      {
+        "datasource": null,
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": null,
+              "filterable": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "green",
+                  "value": 500
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 0,
+          "y": 1
+        },
+        "id": 5,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "7.3.7",
+        "targets": [
+          {
+            "alias": "",
+            "groupBy": [
+              {
+                "params": [
+                  "15m"
+                ],
+                "type": "time"
+              }
+            ],
+            "hide": false,
+            "limit": "",
+            "measurement": "status",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT count(\"text\") FROM \"status\" WHERE (\"track\" = 'gme') AND $timeFilter GROUP BY time($__interval)",
+            "rawQuery": false,
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "text"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "count"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Tweets",
+        "transformations": [],
+        "transparent": true,
+        "type": "stat"
+      },
+      {
+        "datasource": null,
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": null,
+              "filterable": false
+            },
+            "decimals": 1,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 21,
+          "x": 3,
+          "y": 1
+        },
+        "id": 8,
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "last"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "7.3.7",
+        "targets": [
+          {
+            "alias": "positive",
+            "groupBy": [],
+            "measurement": "status",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "pos"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [
+                    "30"
+                  ],
+                  "type": "moving_average"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "alias": "negative",
+            "groupBy": [],
+            "measurement": "status",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "C",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "neg"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [
+                    "30"
+                  ],
+                  "type": "moving_average"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Data",
+        "transformations": [],
+        "transparent": true,
+        "type": "gauge"
+      },
+      {
+        "aliasColors": {
+          "negative": "green"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": null,
+              "filterable": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 15,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "hiddenSeries": false,
+        "id": 9,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.3.7",
+        "pointradius": 0.5,
+        "points": false,
+        "renderer": "flot",
+        "repeat": null,
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "alias": "news",
+            "groupBy": [],
+            "measurement": "status",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT median(\"neg\") FROM \"status\" WHERE (\"track\" = 'news') AND $timeFilter",
+            "rawQuery": false,
+            "refId": "C",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "neg"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [
+                    "30"
+                  ],
+                  "type": "moving_average"
+                }
+              ]
+            ],
+            "tags": [
+              {
+                "key": "track",
+                "operator": "=",
+                "value": "news"
+              }
+            ]
+          },
+          {
+            "alias": "elon",
+            "groupBy": [],
+            "measurement": "status",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT median(\"neg\") FROM \"status\" WHERE (\"track\" = 'elon') AND $timeFilter",
+            "rawQuery": false,
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "neg"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [
+                    "30"
+                  ],
+                  "type": "moving_average"
+                }
+              ]
+            ],
+            "tags": [
+              {
+                "key": "track",
+                "operator": "=",
+                "value": "elon"
+              }
+            ]
+          },
+          {
+            "alias": "gme",
+            "groupBy": [],
+            "measurement": "status",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT median(\"neg\") FROM \"status\" WHERE (\"track\" = 'gme') AND $timeFilter",
+            "rawQuery": false,
+            "refId": "B",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "neg"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [
+                    "30"
+                  ],
+                  "type": "moving_average"
+                }
+              ]
+            ],
+            "tags": [
+              {
+                "key": "track",
+                "operator": "=",
+                "value": "gme"
+              }
+            ]
+          },
+          {
+            "alias": "wsb",
+            "groupBy": [],
+            "measurement": "status",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT median(\"neg\") FROM \"status\" WHERE (\"track\" = 'gme') AND $timeFilter",
+            "rawQuery": false,
+            "refId": "D",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "neg"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [
+                    "30"
+                  ],
+                  "type": "moving_average"
+                }
+              ]
+            ],
+            "tags": [
+              {
+                "key": "track",
+                "operator": "=",
+                "value": "wallstreetbets"
+              }
+            ]
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "moving_avg(neg) by hashtag",
+        "tooltip": {
+          "shared": true,
+          "sort": 1,
+          "value_type": "individual"
+        },
+        "transformations": [],
+        "transparent": true,
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "percentunit",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      }
+    ],
+    "refresh": "10s",
+    "schemaVersion": 26,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Twitter Sentiment Analysis",
+    "uid": "1P5OLqLGk",
+    "version": 17
+  }
