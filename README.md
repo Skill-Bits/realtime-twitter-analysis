@@ -10,3 +10,9 @@
  # Setup
  
  create .env file inside 1.ingest folder and put there your twitter credentials
+
+
+
+ # Improvements for the future
+
+ - dockerize python scripts
