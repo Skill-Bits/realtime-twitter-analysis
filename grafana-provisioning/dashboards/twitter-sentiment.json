@@ -36,10 +36,10 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
-          "custom": {
-            "align": null,
-            "filterable": false
+          "color": {
+            "mode": "thresholds"
           },
+          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -77,9 +77,10 @@
           "fields": "",
           "values": false
         },
+        "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.7",
+      "pluginVersion": "7.4.1",
       "targets": [
         {
           "alias": "",
@@ -132,10 +133,7 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {
-            "align": null,
-            "filterable": false
-          },
+          "custom": {},
           "decimals": 1,
           "mappings": [],
           "thresholds": {
@@ -171,9 +169,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "text": {}
       },
-      "pluginVersion": "7.3.7",
+      "pluginVersion": "7.4.1",
       "targets": [
         {
           "alias": "positive",
@@ -246,23 +245,10 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
-          "custom": {
-            "align": null,
-            "filterable": false
-          },
-          "mappings": [],
+          "custom": {},
           "thresholds": {
             "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
+            "steps": []
           },
           "unit": "percentunit"
         },
@@ -300,7 +286,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.7",
+      "pluginVersion": "7.4.1",
       "pointradius": 0.5,
       "points": false,
       "renderer": "flot",
@@ -413,15 +399,50 @@
           ]
         },
         {
-          "alias": "wsb",
+          "alias": "usa",
           "groupBy": [],
           "hide": false,
           "measurement": "status",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT moving_average(\"neg\", 40) FROM \"status\" WHERE (\"track\" = 'wallstreetbets') AND $timeFilter -  1h",
+          "query": "SELECT moving_average(\"neg\", 40) FROM \"status\" WHERE (\"track\" = 'usa') AND $timeFilter -  1h",
           "rawQuery": true,
           "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "neg"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "40"
+                ],
+                "type": "moving_average"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "track",
+              "operator": "=",
+              "value": "wallstreetbets"
+            }
+          ]
+        },
+        {
+          "alias": "trump",
+          "groupBy": [],
+          "hide": false,
+          "measurement": "status",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT moving_average(\"neg\", 40) FROM \"status\" WHERE (\"track\" = 'trump') AND $timeFilter -  1h",
+          "rawQuery": true,
+          "refId": "E",
           "resultFormat": "time_series",
           "select": [
             [
@@ -512,23 +533,10 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
-          "custom": {
-            "align": null,
-            "filterable": false
-          },
-          "mappings": [],
+          "custom": {},
           "thresholds": {
             "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
+            "steps": []
           }
         },
         "overrides": []
@@ -563,7 +571,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.7",
+      "pluginVersion": "7.4.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -667,7 +675,7 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 26,
+  "schemaVersion": 27,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -681,5 +689,5 @@
   "timezone": "",
   "title": "Twitter Sentiment Analysis",
   "uid": "1P5OLqLGk",
-  "version": 19
+  "version": 20
 }
