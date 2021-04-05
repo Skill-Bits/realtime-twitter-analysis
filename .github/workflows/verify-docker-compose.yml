@@ -1,0 +1,11 @@
+name: VerifyDockerCompose
+on: push
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Show the config
+        run: docker-compose config
+      - name: Run
+        run: docker-compose up -d --build
